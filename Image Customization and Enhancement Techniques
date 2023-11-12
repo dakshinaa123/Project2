@@ -1,0 +1,694 @@
+import tkinter
+from tkinter import *
+from PIL import Image,ImageTk
+win=tkinter.Tk()
+win.geometry('1000x1000')
+win.resizable(False, False)
+win.title('Main Window')
+win.configure(bg='lightgreen')
+
+# C:/Users/K. S. Dakshinaa/OneDrive/Pictures/pexels-photo-3881104.png
+# C:/Users/K. S. Dakshinaa/OneDrive/Pictures/pexels-photo-1579708.png
+# C:\Users\K. S. Dakshinaa\OneDrive\Desktop\pexels-photo-10322825.jpeg
+
+def show():
+    global w
+    global L
+    if E1.get()=='':    
+        L2=tkinter.Label(win,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L2.place(x=400,y=200)
+        w.destroy()
+    else:
+        '''
+        w=Canvas(win,width=500,height=500) 
+        image= (Image.open(E1.get()))
+        resized_image = image.resize((500, 500))
+        new_image= ImageTk.PhotoImage(resized_image)
+        w.create_image(0,0,anchor=NW,image=new_image)
+        w.place(x=250,y=170)
+        L2.destroy()
+        win.mainloop()
+'''
+        # Create a photoimage object of the image in the path
+        image = Image.open(E1.get())
+        image1 = image.resize((500, 500))
+        image2 = ImageTk.PhotoImage(image1)
+        label1 = tkinter.Label(image=image2)
+        label1.image = image2
+        # Position image
+        label1.place(x=250,y=170)
+        win.mainloop()
+
+
+        
+def laplacian_sharp():
+    global E1
+    #Import the necessary libraries
+    import cv2
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Load the image
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Sharpen the image using the Laplacian operator
+    sharpened_image2 = cv2.Laplacian(image, cv2.CV_64F)
+
+    #Save the image
+    cv2.imwrite('Laplacian sharpened_image.jpg', sharpened_image2)
+
+    #Plot the sharpened image
+    plt.subplot(1, 2, 2)
+    plt.title("Laplacian Sharpening")
+    plt.imshow(sharpened_image2)
+    plt.show()
+
+def medium_blur():
+    global E1
+    #Import the necessary libraries
+    import cv2
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Load the image
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Remove noise using a median filter
+    filtered_image = cv2.medianBlur(image, 11)
+
+    #Save the image
+    cv2.imwrite('Median Blur.jpg', filtered_image)
+
+    #Plot the blured image
+    plt.subplot(1, 2, 2)
+    plt.title("Median Blur")
+    plt.imshow(filtered_image)
+    plt.show()
+
+def gaussian_blur():
+    global E1
+    #Import the necessary libraries
+    import cv2
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Load the image
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Remove noise using a Gaussian filter
+    filtered_image2 = cv2.GaussianBlur(image, (7, 7), 0)
+
+    #Save the image
+    cv2.imwrite('Gaussian Blur.jpg', filtered_image2)
+
+    #Plot the blured image
+    plt.subplot(1, 2, 2)
+    plt.title("Gaussian Blur")
+    plt.imshow(filtered_image2)
+    plt.show()
+
+def sharp():
+    #Import the necessary libraries
+    import cv2
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Load the image
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Create the sharpening kernel
+    kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])
+
+    # Sharpen the image
+    sharpened_image = cv2.filter2D(image, -1, kernel)
+
+    #Save the image
+    cv2.imwrite('Sharpened_image.jpg', sharpened_image)
+
+    #Plot the sharpened image
+    plt.subplot(1, 2, 2)
+    plt.title("Sharpening")
+    plt.imshow(sharpened_image)
+    plt.show()
+
+def enhanced_color():
+    #Import the necessary libraries 
+    import cv2 
+    import matplotlib.pyplot as plt 
+    import numpy as np 
+
+    # Load the image 
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+
+    #Plot the original image 
+    plt.subplot(1, 2, 1) 
+    plt.title("Original") 
+    plt.imshow(image) 
+
+    # Convert the image from BGR to HSV color space 
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV) 
+
+    # Adjust the hue, saturation, and value of the image 
+    # Adjusts the hue by multiplying it by 0.7 
+    image[:, :, 0] = image[:, :, 0] * 0.7
+    # Adjusts the saturation by multiplying it by 1.5 
+    image[:, :, 1] = image[:, :, 1] * 1.5
+    # Adjusts the value by multiplying it by 0.5 
+    image[:, :, 2] = image[:, :, 2] * 0.5
+
+    # Convert the image back to BGR color space 
+    image2 = cv2.cvtColor(image, cv2.COLOR_HSV2BGR) 
+
+    #Save the image 
+    cv2.imwrite('Enhanced coloured.jpg', image2) 
+
+    #Plot the enhanced image 
+    plt.subplot(1, 2, 2) 
+    plt.title("Enhanced coloured") 
+    plt.imshow(image2) 
+    plt.show()
+
+def inverse_color():
+    #Import the necessary libraries 
+    import cv2 
+    import matplotlib.pyplot as plt 
+    import numpy as np 
+
+    # Load the image 
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+
+    #Plot the original image 
+    plt.subplot(1, 2, 1) 
+    plt.title("Original") 
+    plt.imshow(image) 
+
+    # Inverse by subtracting from 255 
+    inverse_image = 255 - image 
+
+    #Save the image 
+    cv2.imwrite('Inverse_image.jpg', inverse_image) 
+    #Plot the Inverse image 
+    plt.subplot(1, 2, 2) 
+    plt.title("Inverse color") 
+    plt.imshow(inverse_image) 
+    plt.show()
+
+def equalized():
+    #Import the necessary libraries 
+    import cv2 
+    import matplotlib.pyplot as plt 
+    import numpy as np 
+
+    # Load the image 
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+    #Plot the original image 
+    plt.subplot(1, 2, 1) 
+    plt.title("Original") 
+    plt.imshow(image) 
+
+    # Convert the image to grayscale 
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) 
+
+    # Equalize the histogram 
+    equalized_image = cv2.equalizeHist(gray_image) 
+
+    #Save the equalized image 
+    cv2.imwrite('Equalized.jpg', equalized_image) 
+
+    #Plot the equalized image 
+    plt.subplot(1, 2, 2) 
+    plt.title("Equalized") 
+    plt.imshow(equalized_image) 
+    plt.show()
+
+def translate():
+    import cv2
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Load the image 
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Define the translation matrix
+    tx = eval(E2.get())  # Translate 50 pixels to the right
+    ty = eval(E3.get())  # Translate 30 pixels down
+
+    # Construct the translation matrix
+    translation_matrix = np.float32([[1, 0, tx],
+                                     [0, 1, ty]])
+
+    # Apply the translation
+    translated_image = cv2.warpAffine(image, translation_matrix, (image.shape[1], image.shape[0]))
+
+    #Save the image
+    cv2.imwrite('Translated_image.jpg', translated_image)
+                
+    #Plot the translated image
+    plt.subplot(1, 2, 2)
+    plt.title("Translated")
+    plt.imshow(translated_image)
+    plt.show()
+
+
+def on_click1():
+    global E2,E3
+    # Define the translation matrix
+    L3=tkinter.Label(win2,text="Mention Dimensions",font=("Arial",14),fg="Blue", borderwidth=3)
+    L3.place(x=150,y=550)
+    L1=tkinter.Label(win2,text="Pixels to Right",font=("Arial",14),fg="Blue", borderwidth=3)
+    L1.place(x=150,y=600)
+    E2=tkinter.Entry(win2,width=50,font=(14), borderwidth=2, relief="solid")
+    E2.place(x=350,y=600)
+    L2=tkinter.Label(win2,text="Pixels to Down",font=("Arial",14),fg="Blue", borderwidth=3)
+    L2.place(x=150,y=650)
+    E3=tkinter.Entry(win2,width=50,font=(14), borderwidth=2, relief="solid")
+    E3.place(x=350,y=650)
+    B16=tkinter.Button(win2,text="Enter",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=translate)
+    B16.place(x=250,y=700)
+
+def reflect1():
+    import cv2
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Load the image 
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Construct the reflection matrix 
+    # Flip Horizontally
+    rows, cols = image.shape[:2]
+    M = np.float32([[1, 0, 0], [0, -1, rows],[0,  0, 1]])
+
+    # Apply the reflection
+    reflected_image = cv2.warpPerspective(image, M,(int(cols),int(rows)))
+
+    #Save the image
+    cv2.imwrite('Reflected_image.jpg', reflected_image)
+                    
+    #Plot the reflected image
+    plt.subplot(1, 2, 2)
+    plt.title("Reflected Image")
+    plt.imshow(reflected_image)
+    plt.show()
+
+def reflect2():
+    import cv2
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Load the image 
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Construct the reflection matrix
+    # Flip Vertically
+    rows, cols = image.shape[:2]
+    M = np.float32([[-1, 0, cols], [0, 1, 0], [0, 0, 1]])
+
+
+    # Apply the reflection
+    reflected_image = cv2.warpPerspective(image, M,(int(cols),int(rows)))
+
+    #Save the image
+    cv2.imwrite('Reflected_image.jpg', reflected_image)
+                    
+    #Plot the reflected image
+    plt.subplot(1, 2, 2)
+    plt.title("Reflected Image")
+    plt.imshow(reflected_image)
+    plt.show()
+
+def on_click2():
+    B18=tkinter.Button(win2,text="Flip Horizontally",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=reflect1)
+    B18.place(x=200,y=550)    
+    B19=tkinter.Button(win2,text="Flip Vertically",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=reflect2)
+    B19.place(x=500,y=550)
+
+def rotate():
+    import cv2
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Load the image 
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Define the angle by which you want to rotate the image (in degrees)
+    angle = eval(E4.get())
+
+    # Get the dimensions of the image
+    height, width = image.shape[:2]
+
+    # Calculate the rotation matrix
+    rotation_matrix = cv2.getRotationMatrix2D((width / 2, height / 2), angle, 1)
+
+    # Apply the rotation to the image
+    rotated_image = cv2.warpAffine(image, rotation_matrix, (width, height))
+
+    #Save the image
+    cv2.imwrite('Rotated_image.jpg', rotated_image)
+                    
+    #Plot the rotated image
+    plt.subplot(1, 2, 2)
+    plt.title("Rotated Image")
+    plt.imshow(rotated_image)
+    plt.show()
+    
+def on_click3():
+    global E4
+    # Define the translation matrix
+    L3=tkinter.Label(win2,text="Mention Angle",font=("Arial",14),fg="Blue", borderwidth=3)
+    L3.place(x=150,y=550)
+    E4=tkinter.Entry(win2,width=50,font=(14), borderwidth=2, relief="solid")
+    E4.place(x=350,y=550)
+    B17=tkinter.Button(win2,text="Enter",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=rotate)
+    B17.place(x=550,y=600)
+
+def scale():
+    import cv2
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Define the new width and height for the scaled image
+    new_width = eval(E5.get())
+    new_width1 = float(new_width)
+    new_height = eval(E6.get())
+    new_height1 = float(new_height)
+
+    # Use cv2.resize() to scale the image
+    scaled_image = cv2.resize(image, (new_width, new_height))
+
+    # Save the scaled image to a file
+    cv2.imwrite('Scaled_image.jpg', scaled_image) 
+                    
+    #Plot the scaled image
+    plt.subplot(1, 2, 2)
+    plt.title("Scaled Image")
+    plt.imshow(scaled_image)
+    plt.show()
+  
+def on_click4():
+    global E5,E6
+    L4=tkinter.Label(win2,text="Mention Dimensions",font=("Arial",14),fg="Blue", borderwidth=3)
+    L4.place(x=150,y=550)
+    L5=tkinter.Label(win2,text="Width",font=("Arial",14),fg="Blue", borderwidth=3)
+    L5.place(x=150,y=600)
+    E5=tkinter.Entry(win2,width=50,font=(14), borderwidth=2, relief="solid")
+    E5.place(x=250,y=600)
+    L6=tkinter.Label(win2,text="Height",font=("Arial",14),fg="Blue", borderwidth=3)
+    L6.place(x=150,y=650)
+    E6=tkinter.Entry(win2,width=50,font=(14), borderwidth=2, relief="solid")
+    E6.place(x=250,y=650)
+    B20=tkinter.Button(win2,text="Enter",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=scale)
+    B20.place(x=250,y=700)
+
+def crop():
+    import cv2
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Read Image
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+        
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Define the coordinates of the top-left and bottom-right corners of the region to crop
+    # Top-left corner (x1, y1)
+    # Bottom-right corner (x2, y2)  
+    a=eval(E7.get())
+    b=eval(E8.get())
+    x,y=a,b
+    x1=x[0]
+    y1=x[1]
+    x2=y[0]
+    y2=y[1]
+
+    
+    # Crop the region from the image
+    cropped_image = image[y1:y2, x1:x2]
+
+    # Save the cropped image to a file
+    cv2.imwrite('cropped_out.jpg', cropped_image)
+                    
+    #Plot the cropped image
+    plt.subplot(1, 2, 2)
+    plt.title("Cropped Image")
+    plt.imshow(cropped_image)
+    plt.show()
+
+def on_click5():
+    global E7,E8
+    L9=tkinter.Label(win2,text="Mention Dimensions",font=("Arial",14),fg="Blue", borderwidth=3)
+    L9.place(x=150,y=550)
+    L7=tkinter.Label(win2,text="Top Left Corner",font=("Arial",14),fg="Blue", borderwidth=3)
+    L7.place(x=150,y=600)
+    E7=tkinter.Entry(win2,width=50,font=(14), borderwidth=2, relief="solid")
+    E7.place(x=350,y=600)
+    L8=tkinter.Label(win2,text="Bottom Right Corner",font=("Arial",14),fg="Blue", borderwidth=3)
+    L8.place(x=150,y=650)
+    E8=tkinter.Entry(win2,width=50,font=(14), borderwidth=2, relief="solid")
+    E8.place(x=350,y=650)
+    B21=tkinter.Button(win2,text="Enter",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=crop)
+    B21.place(x=250,y=700)
+
+def shearx():
+    import cv2
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Read Image
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+        
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Define Rows and Columns of image size
+    rows, cols = image.shape[:2]
+
+    # Create Shear Matrix
+    M = np.float32([[1, 0.5, 0], [0, 1, 0], [0, 0, 1]])
+    sheared_img = cv2.warpPerspective(image, M, (int(cols*1.5), int(rows*1.5)))
+
+    # Save the scaled image to a file
+    cv2.imwrite('sheared_img.jpg', sheared_img)
+                    
+    #Plot the reflected image
+    plt.subplot(1, 2, 2)
+    plt.title("Sheared Image in X axis")
+    plt.imshow(sheared_img)
+    plt.show()
+
+def sheary():
+    import cv2
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Read Image
+    if E1.get()=='':
+        L=tkinter.Label(win2,text="Image Not Found",bg="aqua", font=("Arial",25))
+        L.place(x=300,y=300)
+    else:
+        img=E1.get()
+        image = cv2.imread(img)
+        
+    #Plot the original image
+    plt.subplot(1, 2, 1)
+    plt.title("Original")
+    plt.imshow(image)
+
+    # Define Rows and Columns of image size
+    rows, cols = image.shape[:2]
+
+    # Create Shear Matrix
+    M = np.float32([[1, 0, 0], [0.5, 1, 0], [0,   0, 1]])
+    sheared_img = cv2.warpPerspective(image, M, (int(cols*1.5), int(rows*1.5)))
+
+    # Save the scaled image to a file
+    cv2.imwrite('sheared_img.jpg', sheared_img)
+                    
+    #Plot the reflected image
+    plt.subplot(1, 2, 2)
+    plt.title("Sheared Image in Y axis")
+    plt.imshow(sheared_img)
+    plt.show()
+
+def customize():
+    global win2
+    win2=tkinter.Tk()
+    win2.geometry('1000x1000')
+    win2.resizable(False, False)
+    win2.title('Side Window')
+    win2.configure(bg='lightgreen')
+    L3=tkinter.Label(win2,text="Options Available",bg="aqua", font=("Impact",25),fg="green", borderwidth=2, relief="solid")
+    L3.place(x=350,y=10)
+    L4=tkinter.Label(win2,text="Image Enhancement",bg="aqua", font=("Impact",25),fg="green", borderwidth=2, relief="solid")
+    L4.place(x=100,y=70)
+    L4=tkinter.Label(win2,text="Image Transformation",bg="aqua", font=("Impact",25),fg="green", borderwidth=2, relief="solid")
+    L4.place(x=500,y=70)
+    B3=tkinter.Button(win2,text="Laplacian Sharpening",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=laplacian_sharp)
+    B3.place(x=150,y=300)
+    B3=tkinter.Button(win2,text="Sharpening",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=sharp)
+    B3.place(x=150,y=250)
+    B4=tkinter.Button(win2,text="Median Blur",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=medium_blur)
+    B4.place(x=150,y=150)
+    B5=tkinter.Button(win2,text="Gaussian Blur",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=gaussian_blur)
+    B5.place(x=150,y=200)
+    B6=tkinter.Button(win2,text="Enhanced Coloured",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=enhanced_color)
+    B6.place(x=150,y=350)
+    B7=tkinter.Button(win2,text="Inverse Color",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=inverse_color)
+    B7.place(x=150,y=400)
+    B8=tkinter.Button(win2,text="Equalized",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=equalized)
+    B8.place(x=150,y=450)
+
+    B9=tkinter.Button(win2,text="Scaling",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=on_click4)
+    B9.place(x=550,y=300)
+    B10=tkinter.Button(win2,text="Rotating",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=on_click3)
+    B10.place(x=550,y=250)
+    B11=tkinter.Button(win2,text="Translating",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=on_click1)
+    B11.place(x=550,y=150)
+    B12=tkinter.Button(win2,text="Reflecting",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=on_click2)
+    B12.place(x=550,y=200)
+    B13=tkinter.Button(win2,text="Cropping",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=on_click5)
+    B13.place(x=550,y=350)
+    B14=tkinter.Button(win2,text="Shearing in X-axis",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=shearx)
+    B14.place(x=550,y=400)
+    B15=tkinter.Button(win2,text="Shearing in Y-axis",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=sheary)
+    B15.place(x=550,y=450)
+
+
+L=tkinter.Label(win,text="Image Customization",bg="aqua", font=("Impact",25),fg="green", borderwidth=2, relief="solid")
+L.place(x=400,y=10)
+
+L1=tkinter.Label(win,text="Path of Image",bg="aqua", font=("Arial",14),fg="Blue", borderwidth=2, relief="solid")
+L1.place(x=100,y=80)
+
+E1=tkinter.Entry(win,width=50,font=(14), borderwidth=2, relief="solid")
+E1.place(x=300,y=83)
+
+B1=tkinter.Button(win,text="Submit",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=show)
+B1.place(x=450,y=120)
+
+B2=tkinter.Button(win,text="Customize",font=("Arial",14),fg="Blue", borderwidth=3, relief="raised",command=customize)
+B2.place(x=600,y=120)
+
+win.mainloop()
